@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  web:
+    image: nginx:latest
+    container_name: nginx_server
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./django/staticfiles:/home/app/staticfiles
+    depends_on:
+      - django
+
+  django:
+    build:
+      context: ./spotify_proj
+    container_name: django_server
+    command: gunicorn spotify_clone.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./spotify_proj:/usr/src/app
+    expose:
+      - "8000"
+    environment:
+      - DEBUG=0
+      - DJANGO_ALLOWED_HOSTS=*
+
+
+
+  
+  dns:
+    build: ./dns
+    container_name: dns_server
+    ports:
+      - "5354:53/udp"
+      - "5354:53/tcp"
+ 

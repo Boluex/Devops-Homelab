@@ -1,0 +1,33 @@
+ kubectl delete configmap custom-prometheus-config -n monitoring
+
+
+
+
+
+
+
+
+
+
+kubectl create configmap custom-prometheus-config \
+  --from-file=prometheus.yml=./prometheus.yml \
+  -n monitoring
+
+
+
+helm uninstall prometheus -n monitoring
+
+
+
+
+
+helm install prometheus prometheus-community/prometheus \
+  --namespace monitoring \
+  --set server.configMapOverrideName=custom-prometheus-config
+
+
+
+
+to check your configMap
+kubectl edit configmap prometheus-custom-prometheus-config -n monitoring
+kubectl rollout restart deployment prometheus-server -n monitoring

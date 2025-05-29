@@ -1,0 +1,6 @@
+sudo tcpdump -i <interface> -w capture.pcap
+sudo snort -c usr/local/etc/snort/snort.lua -i <interface> -q -A alert_fast
+for rules
+alert http any any -> any 80 (msg:"Incoming web traffic")
+alert icmp any any -> any any (msg:"Incoming icmp traffic")
+alert tcp any any -> any 22 (msg:"Incoming tcp traffic")
